@@ -14,7 +14,8 @@ SUBTASKS=("relation")
 #TAXONOMIES=("spatial_relationship" "counting" "entity" "attribute")
 TAXONOMIES=("spatial_relationship")
 SPLIT_TYPES=("train")
-
+# mask_type means which tokens to steer, image_token, text_token, or both
+# approach means which vectors to use to steer, sae_add, meanshift, linearprobe
 mkdir -p results
 
 

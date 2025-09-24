@@ -7,5 +7,8 @@ for method in meanshift; do
   --method $method \
   --max-manip 60 \
   --split-type train \
-  --plotting-best 
+  --plotting-best \
+  --save-best
 done
+
+# save-best will create a json file in the results directory with the optimal parameters found from the grid search

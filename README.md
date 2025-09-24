@@ -1,10 +1,10 @@
-# TextSteersVision: Feature Steering for Vision-Language Models
+# TextSteersVision: Textual Feature Steering for Multimodal Large Language Models
 
-This repository contains code for feature steering in vision-language models using three different approaches: Sparse Autoencoders (SAE), Linear Probes, and Mean Shift.
+This repository contains code for feature steering in Multimodal Large Language Models using three different approaches: Sparse Autoencoders (SAE), Linear Probes, and Mean Shift. It is the codebase for `Textual Steering Vectors Can Improve Visual Understanding in Multimodal Large Language Models`.
 
 ## Overview
 
-TextSteersVision implements interpretable feature manipulation techniques for vision-language models including PaliGemma, Idefics, and Gemma3. The framework supports evaluation on multiple computer vision benchmarks including CVBench, WhatsUp, VSR, BLINK, CLEVR, ChartQA, DocVQA, VTabFact, VQAv2, and COCO Captions.
+TextSteersVision implements interpretable textual feature manipulation techniques for Multimodal Large Language Models including PaliGemma, Idefics, and Gemma3. The framework supports evaluation on multiple computer vision benchmarks including CVBench, WhatsUp, BLINK, CLEVR, Super-CLEVR, ChartQA, DocVQA, VTabFact, VQAv2, and COCO Captions.
 
 ## Features
 
@@ -13,7 +13,7 @@ TextSteersVision implements interpretable feature manipulation techniques for vi
   - Sparse Autoencoders (SAE)
   - Linear Probes
   - Mean Shift
-- **Comprehensive Evaluation**: 10+ vision-language benchmarks
+- **Comprehensive Evaluation**: ~10 vision-language benchmarks
 - **Flexible Configuration**: Grid search and hyperparameter optimization
 - **Visualization Tools**: Heatmaps, improvement plots, and result analysis
 
@@ -51,12 +51,13 @@ Run grid search:
 
 ```bash
 # Run comprehensive grid search
+# Notice that the sae method we presented in the paper is called "sae_add" here. The "sae" method is for factoring the activation value of features, which doesn't work effectively.
 bash cvbench_grid_search.sh
 ```
 
 ### 3. Visualization and Analysis of Optimal Parameters
 
-Generate plots and analysis of results, this will give you the optimal parameters from the grid search:
+Generate plots and analysis of results, this will give you the optimal parameters from the grid search in a json file:
 
 ```bash
 bash plot.sh
@@ -69,6 +70,7 @@ After grid search identifies optimal parameters, evaluate models:
 
 ```bash
 # Example: Evaluate PaliGemma with SAE using best parameters from grid search
+# Here you can use sae for sae. If you want to use the scale method, you can add --intervention_type sacle
 python eval.py \
     --model_type paligemma \
     --model_name google/paligemma2-3b-mix-448 \
@@ -77,7 +79,8 @@ python eval.py \
     --subtask count \
     --taxonomies counting \
     --manipulation_values 20.0 \ # Use best value from grid search
-    --layers 10
+    --layers 10 \
+    --split_type test
 ```
 
 
@@ -114,13 +117,12 @@ TextSteersVision/
 
 - **PaliGemma**: `google/paligemma2-10b-mix-448` and `google/paligemma2-3b-mix-448`
 - **Idefics**: `HuggingFaceTB/idefics3-8b-llama`  
-- **Gemma3**: `google/gemma-2-9b-it`
+- **Gemma3**: `google/gemma-3-4b-it`
 
 ## Supported Datasets
 
 - **CVBench**: Computer vision benchmark
 - **WhatsUp**: Visual reasoning
-- **VSR**: Visual spatial reasoning
 - **BLINK**: Multimodal reasoning
 - **CLEVR**: Visual reasoning
 - **ChartQA**: Chart question answering

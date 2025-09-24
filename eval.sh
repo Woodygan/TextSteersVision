@@ -18,7 +18,7 @@ for layer in "${LAYERS[@]}"; do
                 echo "Running evaluation with: Subtask=$subtask, Layer=$layer, Manipulation Value=$manip_value"
                 python eval.py \
                     --output_dir results \
-                    --approach meanshift  --intervention_type add \
+                    --approach meanshift \
                     --model_type $MODEL_TYPE \
                     --model_name $MODEL_NAME \
                     --taxonomies $taxonomy \

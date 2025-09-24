@@ -98,8 +98,8 @@ def parse_args():
     
     # Data split parameters
     parser.add_argument("--split_type", type=str, default="train", 
-                        choices=["all", "train", "test"],
-                        help="Dataset splits to evaluate (all, train, or test)")
+                        choices=["all", "train", "test", "val"],
+                        help="Dataset splits to evaluate (all, train, val, or test)")
     parser.add_argument("--test_size", type=int, default=150,
                         help="Number of examples to use for test set")
     parser.add_argument("--seed", type=int, default=42,
@@ -135,7 +135,7 @@ def main():
     args = parse_args()
     print(args)
     device = args.device
-    if args.approach == "sae" and args.intervention_type != "scale":
+    if args.approach == "sae" and args.intervention_type != "add":
         print(f"Warning: You are using \"{args.intervention_type}\" method for sae intervention, which is not the vanilla method. ")
     
     # Load model and processor once to reuse across all evaluations
@@ -204,9 +204,9 @@ def main():
                         
     if args.dataset_name == "cvbench":
         dataset = load_cvbench_dataset(
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             split_type=args.split_type,
-            test_size=args.val_size,
+            test_size=args.test_size,
             seed=args.seed
         )
         
@@ -218,7 +218,7 @@ def main():
             config=config,
             model_name=args.model_name,
             taxonomies=[args.taxonomy],
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             mask_type=args.mask_type,
             manipulation_value=args.manipulation_value,
             device=args.device,
@@ -230,9 +230,9 @@ def main():
         )
     elif args.dataset_name == "whatsup":
         dataset = load_whatsup_dataset(
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             split_type=args.split_type,
-            val_size=args.val_size,
+            val_size=args.test_size,
             seed=args.seed
         )
         results = evaluate_whatsup(
@@ -242,7 +242,7 @@ def main():
             config=config,
             model_name=args.model_name,
             taxonomies=[args.taxonomy],
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             mask_type=args.mask_type,
             manipulation_value=args.manipulation_value,
             device=args.device,
@@ -254,9 +254,9 @@ def main():
         )
     elif args.dataset_name == "vsr":
         dataset = load_vsr_dataset(
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             split_type=args.split_type,
-            val_size=args.val_size,
+            val_size=args.test_size,
             seed=args.seed
         )
         results = evaluate_vsr(
@@ -266,7 +266,7 @@ def main():
             config=config,
             model_name=args.model_name,
             taxonomies=[args.taxonomy],
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             mask_type=args.mask_type,
             manipulation_value=args.manipulation_value,
             device=args.device,
@@ -278,9 +278,9 @@ def main():
         )
     elif args.dataset_name == "blink":
         dataset = load_blink_dataset(
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             split_type=args.split_type,
-            val_size=args.val_size,
+            val_size=args.test_size,
             seed=args.seed
         )
         results = evaluate_blink(
@@ -290,7 +290,7 @@ def main():
             config=config,
             model_name=args.model_name,
             taxonomies=[args.taxonomy],
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             mask_type=args.mask_type,
             manipulation_value=args.manipulation_value,
             device=args.device,
@@ -302,9 +302,9 @@ def main():
         )
     elif args.dataset_name == "clevr":
         dataset = load_clevr_dataset(
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             split_type=args.split_type,
-            val_size=args.val_size,
+            val_size=args.test_size,
             seed=args.seed
         )
         results = evaluate_clevr(
@@ -314,7 +314,7 @@ def main():
             config=config,
             model_name=args.model_name,
             taxonomies=[args.taxonomy],
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             mask_type=args.mask_type,
             manipulation_value=args.manipulation_value,
             device=args.device,
@@ -326,9 +326,9 @@ def main():
         )
     elif args.dataset_name == "chartqa":
         dataset = load_chartqa_dataset(
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             split_type=args.split_type,
-            val_size=args.val_size,
+            val_size=args.test_size,
             seed=args.seed
         )
         results = evaluate_chartqa(
@@ -338,7 +338,7 @@ def main():
             config=config,
             model_name=args.model_name,
             taxonomies=[args.taxonomy],
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             mask_type=args.mask_type,
             manipulation_value=args.manipulation_value,
             device=args.device,
@@ -350,9 +350,9 @@ def main():
         )
     elif args.dataset_name == "docvqa":
         dataset = load_docvqa_dataset(
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             split_type=args.split_type,
-            val_size=args.val_size,
+            val_size=args.test_size,
             seed=args.seed
         )
         results = evaluate_docvqa(
@@ -362,7 +362,7 @@ def main():
             config=config,
             model_name=args.model_name,
             taxonomies=[args.taxonomy],
-            subtask=args.subtask_testing,
+            subtask=args.subtask,
             mask_type=args.mask_type,
             manipulation_value=args.manipulation_value,
             device=args.device,
@@ -375,7 +375,7 @@ def main():
     elif args.dataset_name == "vtabfact":
         dataset = load_vtabfact_dataset(
             split_type=args.split_type,
-            val_size=args.val_size,
+            val_size=args.test_size,
             seed=args.seed
         )
         results = evaluate_vtabfact(
@@ -397,7 +397,7 @@ def main():
     elif args.dataset_name == "vqav2":
         dataset = load_vqav2_dataset(
             split_type=args.split_type,
-            val_size=args.val_size,
+            val_size=args.test_size,
             seed=args.seed
         )
         results = evaluate_vqav2(
@@ -419,7 +419,7 @@ def main():
     elif args.dataset_name == "coco_captions":
         dataset = load_coco_captions_dataset(
             split_type=args.split_type,
-            val_size=args.val_size,
+            val_size=args.test_size,
             seed=args.seed
         )
         results = evaluate_coco_captions(
